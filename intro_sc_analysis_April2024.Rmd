@@ -1,0 +1,407 @@
+---
+title: "Introduction to Seurat"
+author: "Deanne Taylor"
+date: "2024-04-01"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+```
+
+
+Seurat is focused on analysis of single-cell data. We will first introduce how Seurat operates so you can get a better handle on how it works.
+
+First, let's go over some basics about R and RStudio.
+
+## R and RStudio
+
+R is a powerful and useful computing language, and is written to be easy to use. If you can learn some basic R programming skills, they will be very useful to you in the future. Learning R is more useful overall than learning 3rd party analysis software packages.
+
+Back in the early days of programming, IT scientists at Bell Labs came up with a Statistical programming language they named 'S'. Since S was so popular, but cost money to license, a group of people set out to re-create and improve on 'S' with a version that was a free and open-source, meaning that communities of people could contribute to the language development. They named this language “R”. R has become quite popular, so one of the major advantages of using R is that it has many published and pre-configured statistical software packages submitted by a vast community of developers in every quantitative scientific field. With all these packages and plenty of references to back them up, there's no need to re-write the same code to do specialized computational tasks. In fact, there are hundreds of different, useful packages (“libraries”) provided in the R repositories, provided by academic and industrial groups whose submitted work is scrutinized, curated, and then accepted by the R-using community. Many methods and R packages have been published in peer-reviewed journals and some cited thousands of times.
+
+The “native” operating environment for R is the command line. R expects you to type something on the command line, and it will return something in text (or write a file for you)
+
+For this course, we will be using a Virtual Desktop Environment (VDI) with a version of R and RStudio in a virtual Windows desktop.
+
+## Logging in:
+
+You can access this RStudio using the web browser (recommended for mac) or by downloading the Horizons application if not already installed on the system if you are using a CHOP Windows machine.
+
+Go to:
+
+https://beyond.chop.edu 
+
+This URL above will grant you access to the VDI applications available to your account. If you have any issues accessing the application let me know and we can jump on a call if that works
+
+Once inside the VDI, click on the R course icon.
+
+You may get a grey start window asking you to choose the R environment you wish to use for this session. Choose the machine default (should already be checked) and click OK.
+
+
+## Basic Data Types and Data Entry
+
+The command line is R's native habitat. The RStudio GUI is simply a wrapper on top of R's executable that also helps with the management of libraries (packages), plots, and the computational environment. 
+
+Let's start with some command-line entry. Click in the left window in RStudio which is the command-line window.  You can paste any R text into your window or type something. If you were running R on the command line without RStudio, you'd be operating in that mode. But RStudio can give us more options.
+
+We'll go through some example commands as we discuss datatypes in R.
+
+## R data types
+
+R command line can function simply as a calculator as well as more sophisitcated function calls.
+
+For instance,  typing "5+1" or "10/2" right in the R command window will return results. However, we often want to store values in a variable, and that is called 'assignment' or 'assigning a variable'.
+
+In R, you assign a value to a variable (such as 'x') using the assignment operator. 
+
+For example, here are R's assignment operators 
+
+* x <- value  (this is the most common form of assignment)
+* x <<- value  (rarely used, most often in functions)
+* value -> x   (less used form)
+* value ->> x (also used in functions)
+* x=value (can be used in certain conditions, see below)
+
+The operator <- can be used anywhere, whereas the operator = is only allowed at the top level (typed at the command prompt) or as one of the subexpressions in a braced list of expressions. 
+
+Try to get in the habit of using the typical assignment operator like 
+
+x <- thing
+
+
+### Checking out data types
+
+The function "str" (structure) is useful to understand the data type in each object you see in your Environment window in RStudio (upper right).
+
+In the command line, type (no quotes) 'x<-5' and then type 'str(x)'
+
+It will tell you that x holds a number, 5. 
+
+Type y<-"mydog" #need the quotes here as 'mydog' is a string.
+
+Type str(y) and you will see 'mydog' is a chr (character) value.
+
+The structure function is somewhat useful for exploring Seurat data and we'll be using it later.
+
+
+###Strings, Numbers and representations
+
+Characters are represented with quotes around them. like "Hi".
+
+Numbers are just entered in as is. 
+
+There are no "blank" assignments in R. Even if you say x->"" it will interpet that as a string of length 0.
+
+We handle missing data with values  NA, NaN, Inf, -Inf. NA is "Not Available" are used for missing values if it's a string (NA). NaN is used for number results and stands for 'Not A Number'. Inf and -Inf are positive and negative infinity. Instead of producing an error in many cases, R will produce these special values that can show up in a result.
+
+###Vectors
+
+The vector is the most basic data type in R.  To create a vector in R, one way is to use the 'c' function, which stands for 'combine'. 
+
+To create a vector, you can type this:
+
+```{r create vector}
+
+myvec <- c(1,2,3,4)
+myvec #type the variable name to return the values
+str(myvec) #numerical vector of length 1:4
+
+```
+
+This command will not work (note the missing combine function)
+myvec <- (1,3,4,5)
+
+Weirdly enough, there is no such thing as a 'naked' number or character in R. In R, x<-5 assigns a vector of length 1. It is equivalent to x<-c(5)  The maximum length of (number of elements in) a vector is 2^31-1, about 2 billion.
+
+
+####Vector types
+
+Vector types are: "logical", "integer", "numeric" (also synonym "double"), "complex", "character" and "raw".   
+
+The three most common vector types you will encounter in Seurat are "integer", "numeric" and "character".
+
+Vectors are "strictly typed".  That is, a vector is only allowed to be one type. This is a very important point.If you try to insert a character such as "Hi" into a numeric vector, it will change the entire vector into a character vector. It's all or nothing.  In that case, your numbers will become characters. Some frustrating errors can happen that way, where your calculations are not working because you have a chr vector when you needed a num vector  -- R cannot do numerical calculations on a character vector. This is why we often use the functions 'typeof' and 'str' to check on variable types in our objects.
+
+```{r data type examples}
+
+#character vector
+myDogs<-c("Chihuahua","Shetland Sheepdog", "Dachshund", "Cocker Spaniel")
+myDogs #type the name of the item to see it returned.
+
+# ?str #help on structure. 
+str(myDogs) #structure of an R object
+
+# ?typeof #type or storage mode of an object
+typeof(myDogs)
+
+#number vector
+testnums<-c(1,2,3,4,5,6)
+testnums
+str(testnums)
+typeof(testnums)
+
+#fast way to generate a number vector
+testspan<-c(1:16)
+testspan
+
+#add together two vectors
+
+newvec<-append(testnums, c(7,8,9))
+newvec
+
+#try appending a character vector
+newvec2<-append(testnums, c("Hi", "there"))
+newvec2
+str(newvec2)
+typeof(newvec2)
+```
+
+
+####Factors
+
+Factors are a special type of data in R. It is a way of representing (encoding) strings (characters) as numbers. A factor vector looks like a chr vector -- but it's different. 'under the hood' a factor vector codes your text into categories that are represented by numbers although you'll just see the names of the categories not their group numbers, when you take a look.
+
+Factors can be an annoyance if you just want the character vectors as they essentially force categories (levels) on each string. The default for reading in files is to turn all character columns into factors, so in this course we will show you how to avoid that complication.
+
+Imagine you had a column of length 10 that only held three different types of items "red", "blue", "green". Factors represent those three different types as 'levels', the levels being ("blue", "green", "red") here in alphabetical order. Let's try it out, you can paste the contents of the grey box into your command line window.
+
+```{r Factors}
+
+myfactordata<-c("red", "blue", "red", "green", "red", "blue", "blue", "red", "green", "green")
+str(myfactordata) #it's a character vector
+typeof(myfactordata) #yup a character vector.
+
+#now let's turn myfactordata into a factor.
+myfactor<-factor(myfactordata) 
+str(myfactor)
+typeof(myfactor)  #what happened? My character vector is now an integer?
+myfactor
+myfactor[2] #what's the second entry in the factor vector?
+levels(myfactor) 
+str(myfactor)
+
+```
+
+###Matrices
+
+Matrices are "strongly typed" 2-dimensional arrays of numbers, characters, booleans, etc -- one type only. 
+
+Vectors can be coerced into matrices. Many R functions that do some serious number crunching require matrices explicitly. We will be discussing matrices throughout the course, so we will simply introduce them here.
+
+```{r matrices}
+#matrices are arrays of a single type (either number, or character...)
+testmat_col<-matrix(testspan, nrow=4, ncol=4)
+testmat_col
+#another way to arrange a matrix.
+testmat_row<-matrix(testspan, nrow=4, ncol=4, byrow=T)
+testmat_row
+
+```
+
+### Data Frames
+
+Data frames are one of the most used data types in R. You can think about data frames as collections of different vector types where the vectors are all the same length.
+
+Data frames are different than matrices as you can have mixed data types in data frames.   Each column in a dataframe is a vector, and must have the same length as every other vector in  the frame and should be related to the other vectors in some way row by row.
+
+Below, I use the 'kable' command from the knitr package 
+to neaten up the view. 
+
+```{r Data frames}
+
+#create a bunch of mixed vectors.
+#
+dogweights <- c(10.11, 20.42, 15.15, 35.73) #Numerical
+dogages<-c("4", "5","6", "7") #Integer
+dogbreeds<-c("Pomeranian","Shetland Sheepdog", "Dachshund", "Cocker Spaniel") #character
+dognames<-c("Maggie", "Trixie", "Buster", "Basil")
+
+#combine these into a data frame with names representing the columns.
+
+mydat1<-data.frame("Name"=dognames, "Breed"=dogbreeds,"Weight"=dogweights, "Age"=dogages, stringsAsFactors = F )
+
+kable(mydat1) 
+
+#creating a data frame with no labels
+mydat2<-data.frame(dognames, dogbreeds,dogweights, dogages,stringsAsFactors = F )
+kable(mydat2)
+
+#create the data in situ in the data frame.
+
+mydat3<-data.frame(cbind( c("Maggie", "Trixie", "Buster", "Basil"),c("Pomeranian","Shetland Sheepdog", "Dachshund", "Cocker Spaniel"), c(10.11, 20.42, 15.15, 35.73), c("4", "5","6", "7")), stringsAsFactors = F)
+
+kable(mydat3)
+#let's add some actual names to those columns.
+
+colnames(mydat3)<-c("Name", "Breed", "Weight", "Age")
+rownames(mydat3)<-c("Dog1", "Dog2", "Dog3", "Dog4")
+kable(mydat3)
+
+#What is the breed of the third dog in the table?
+#addressing a data frame goes by [row,column]
+mydat3[3,3]
+
+#which dog is fourth (row) in the data frame?
+mydat3[4,] #note I left a blank for the column number.
+#or
+mydat3['Dog4',] #pull out by rowname
+
+#Pull out the second column from the data frame.
+mydat3[,2]
+
+#or pull out by column name
+mydat3[,"Breed"]
+
+#Pull out the breed for the fourth dog.
+
+mydat3["Dog4", "Breed"]
+
+#or do it by numbers (remember [row, column])
+mydat3[4,2]
+
+
+```
+
+### Operators
+
+There are familiar arithmetic operators in R, but a few that are specific for the R language. 
+
+
+```{r Operators}
+
+x<-10
+y<-5
+
+#Try some of these:
+ + x   #(change the sign to positive)
+ - x    #(change the sign to negative)
+ x + y  #(add y to x)
+ x - y  #(subtract y from x)
+ x * y  #(multiple x by y)
+ x / y  #(divide x by y)
+ x ^ y  #(raise x to the power of y)
+ x %% y  #(x mod y)
+ x %/% y #(integer division (does not return a floating point number))
+
+```
+
+### Basic Functions
+R has some basic functions that appear in (no surprise) the R library called 'base'.  These include summation, rounding, etc. You can get a list of all the functions in the base package with the library(help='package') command:
+
+library(help = "base")
+
+Here are a few examples:
+
+
+```{r Basic functions}
+
+testnums<-c(1:10)  #create a vector.
+typeof(testnums) #what type is it?
+
+mean(testnums) #mean
+sum(testnums)  #sum
+sd(testnums)  #standard deviation
+round(sd(testnums),digits=2)  #let's round up that example.
+summary(testnums)  #produce useful statistics on the vector.
+
+```
+
+
+### Getting Help
+
+When asking for help on an R function or operator, the best bet is to enclose them in quotes after a question mark.
+
+?"+" gives you help on the plus symbol. ?"sub" gives you help on the substitution operator. If you want to do a more global search for a term in the help files, use double question marks, such as ??"Operators"
+
+
+## Introduction to Seurat
+
+Useful links:
+
+https://satijalab.org/seurat/ 
+https://satijalab.org/seurat/articles/essential_commands.html
+
+
+### Create a project and a new R Markdown File
+
+In RStudio, at the top, click on "File" then "New Project" and create a new directory for your project. 
+
+Next, click on File again, then "New File", then select R Markdown option. Give your file a title and keep all the other defaults (including HTML output). 
+
+Once you've created the file, name and save your file with whatever name you like. It should be saved in the new project directory. 
+
+In R studio, on the lower right pane, there is a Files tab and you should see your R markdown file show up in the tab once you save it.
+
+
+### Install Seurat and set up environment.
+
+You will need to install Seurat into your RStudio environment the first time you use it. 
+
+In your lower right hand window in RStudio, click on the 'packages' tab.
+
+Click on 'Install' and type Seurat. When Seurat shows up in the install list, click on the name and wait - should take a few minutes to install using all the defaults.
+
+
+### Downloading the tutorial data.
+
+Copy the curl command below using 'Edit' at the top of the RStudio window and select Copy.   in the terminal tab in your RStudio command-line window (left lower), use the menu command "Edit" again and "Paste" to paste this command into the terminal window:
+
+curl --output pbmc3k_filtered_gene_bc_matrices.tar.gz https://cf.10xgenomics.com/samples/cell/pbmc3k/pbmc3k_filtered_gene_bc_matrices.tar.gz
+
+Your tutorial file should download.
+
+Next, paste this command in the same way with the Copy/Paste commands under Edit:
+
+tar -xvf pbmc3k_filtered_gene_bc_matrices.tar.gz
+
+If you type "dir" in the terminal window next, you should see that file plus it's unpacked form, "filtered_gene_bc_matrices" in the project directory. The files should also show up in your Files pane.
+
+### Creating your R Markdown document.
+
+You can copy the commands into your RMarkdown and also make comments. To create the R executable sections called chunks (grey boxes), click on the small green box dropdown in the upper right side in your script window. Select R. You can make notes to yourself in the white areas outside the grey boxes, or you can make notes in the grey boxes themselves by commenting out with # symbols (see examples above). When you compile your document it will produce all plots and allow you to save the result in HTML.
+
+Markdown is a quick way to format your document. Some Markdown formats are shown here:
+
+https://www.markdownguide.org/basic-syntax/
+
+It's useful if you want to execute an R script and save the output for a report. It's also a nice way to compartmentalize your analyses as well.
+
+
+### Seurat: the much improved tutorial
+
+We will be following this tutorial:
+
+https://satijalab.org/seurat/articles/pbmc3k_tutorial
+
+This tutorial has improved so much over the past few years!  
+
+In the tutorial, the first section needs to be altered for our file path as shown below, to make sure we have the correct file path to the pbmc data you just downloaded in the terminal.
+
+
+```{r Seurat block 1}
+
+library(dplyr)
+library(Seurat)
+library(patchwork)
+
+# Load the PBMC dataset
+pbmc.data <- Read10X(data.dir = "filtered_gene_bc_matrices/hg19/")
+# Initialize the Seurat object with the raw (non-normalized data).
+pbmc <- CreateSeuratObject(counts = pbmc.data, project = "pbmc3k", min.cells = 3, min.features = 200)
+pbmc
+
+```
+
+We will now step through this tutorial. Each chunk can be copied if you mouse over the chunk you should see a copy command show up. Makes it easy to engineer your RMarkdown document...which we will do together.
+
+
+
+
+
+
+
+
