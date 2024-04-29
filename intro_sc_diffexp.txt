@@ -3,3 +3,16 @@ Differential Expression Analysis
 See this Seurat vignette:
 https://satijalab.org/seurat/articles/de_vignette
 
+## Logging in:
+
+You can access this RStudio using the web browser (recommended for mac) or by downloading the Horizons application if not already installed on the system if you are using a CHOP Windows machine.
+
+Go to:
+
+https://beyond.chop.edu 
+
+This URL above will grant you access to the VDI applications available to your account. If you have any issues accessing the application let me know and we can jump on a call if that works
+
+Once inside the VDI, click on the R course icon.
+
+You may get a grey start window asking you to choose the R environment you wish to use for this session. Choose the machine default (should already be checked) and click OK.
