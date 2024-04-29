@@ -16,3 +16,8 @@ This URL above will grant you access to the VDI applications available to your a
 Once inside the VDI, click on the R course icon.
 
 You may get a grey start window asking you to choose the R environment you wish to use for this session. Choose the machine default (should already be checked) and click OK.
+
+
+EnhancedVolcano vignette (installation of bioconductor and playing with EV):
+https://bioconductor.org/packages/devel/bioc/vignettes/EnhancedVolcano/inst/doc/EnhancedVolcano.html
+
