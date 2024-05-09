@@ -1,0 +1,28 @@
+Trajectory analysis
+
+This week we'll walk through some trajectory analysis in R.
+
+Both packages are available in Bioconductor.
+
+Literature of interest:
+  Monocle3: https://cole-trapnell-lab.github.io/monocle3/papers/
+  Slingshot:  https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-018-4772-0
+  Wide comparision of trajectory methods: https://www.nature.com/articles/s41587-019-0071-9
+
+Information:
+   Monocle3 home page: https://cole-trapnell-lab.github.io/monocle3/
+   Slingshot home page: https://github.com/kstreet13/slingshot
+
+Installation:
+  Monocle3: https://cole-trapnell-lab.github.io/monocle3/docs/installation/ 
+  Slingshot: https://github.com/kstreet13/slingshot
+
+Tutorials:
+   Monocle3:   https://cole-trapnell-lab.github.io/monocle3/docs/getting_started/
+   Slingshot:  https://bioconductor.org/packages/devel/bioc/vignettes/slingshot/inst/doc/vignette.html
+
+
+Coming up: Multiomics and single-cell ATAC-seq data 
+
+Signac: https://stuartlab.org/signac/
+Signac/Seurat multi-omics:  https://stuartlab.org/signac/articles/pbmc_multiomic
